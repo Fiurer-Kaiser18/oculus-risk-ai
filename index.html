@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#05070d">
+  <meta name="description" content="OCULUS RISK AI — inspección multimodal de campo">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg">
+  <title>OCULUS RISK AI</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand"><span class="eye">◉</span><div><b>OCULUS</b><small>RISK AI</small></div></div>
+    <div class="status"><i id="statusDot"></i><span id="statusText">Sistema</span></div>
+  </header>
+
+  <main id="screen">
+    <section class="hero">
+      <div class="hero-eye"><div class="iris"></div><div class="lens"></div></div>
+      <p class="eyebrow">OBSERVA · ESCUCHA · ANALIZA · DIAGNOSTICA</p>
+      <h1>Centro de mando</h1>
+      <p class="muted">Inspección técnica, ambiental y de riesgos con evidencia trazable.</p>
+      <button class="primary big" id="newBtn">＋ Nueva inspección</button>
+    </section>
+
+    <section class="cards">
+      <article class="card" onclick="showHistory()"><span>◫</span><b>Historial</b><small id="countCard">0 inspecciones</small></article>
+      <article class="card" onclick="showModule('environment')"><span>◈</span><b>Análisis ambiental</b><small>Componentes y contexto</small></article>
+      <article class="card" onclick="showModule('lab')"><span>⌁</span><b>Laboratorio</b><small>Parámetros y resultados</small></article>
+      <article class="card" onclick="showModule('knowledge')"><span>◉</span><b>Mente Construida</b><small>Fuentes técnicas</small></article>
+      <article class="card" onclick="showModule('matrix')"><span>▦</span><b>Matriz de impactos</b><small>Editable y trazable</small></article>
+      <article class="card" onclick="showModule('reports')"><span>▤</span><b>Informes</b><small>Vista e impresión PDF</small></article>
+    </section>
+
+    <section class="notice">
+      <b>Estado de IA</b>
+      <span id="aiState">Comprobando proveedor…</span>
+    </section>
+  </main>
+
+  <nav class="bottom">
+    <button class="active" onclick="goHome()">⌂<span>Inicio</span></button>
+    <button onclick="newInspection()">◎<span>Inspeccionar</span></button>
+    <button onclick="showHistory()">◫<span>Historial</span></button>
+    <button onclick="showModule('settings')">⚙<span>Ajustes</span></button>
+  </nav>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>

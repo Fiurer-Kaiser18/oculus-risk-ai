@@ -1,0 +1,10 @@
+{
+  "name": "OCULUS RISK AI",
+  "short_name": "OCULUS",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05070d",
+  "theme_color": "#05070d",
+  "description": "Inspección multimodal técnica y ambiental.",
+  "icons": [{"src":"/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

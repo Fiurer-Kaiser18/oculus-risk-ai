@@ -7,7 +7,7 @@ import { GoogleGenAI } from "@google/genai";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DATA_DIR = path.join(__dirname, "data");
+const DATA_DIR = "/tmp/oculus-risk-ai";
 const DB_FILE = path.join(DATA_DIR, "inspections.json");
 
 await fs.mkdir(DATA_DIR, { recursive: true });
@@ -144,6 +144,13 @@ app.post("/api/live-token", async (_req, res) => {
   }
 });
 
-app.get("*", (_req, res) => res.sendFile(path.join(__dirname, "public", "index.html")));
+app.use((err, _req, res, _next) => {
+  console.error(err);
+  res.status(500).json({ error: "Error interno del servidor." });
+});
 
-app.listen(PORT, () => console.log(`OCULUS RISK AI listening on ${PORT}`));
+export default app;
+
+if (process.env.VERCEL !== "1") {
+  app.listen(PORT, () => console.log(`OCULUS RISK AI listening on ${PORT}`));
+}

@@ -118,21 +118,264 @@ async function saveInspection(){
     alert("Inspección guardada.");
   }catch(e){alert(e.message)}
 }
-function showHistory(){
-  screen().innerHTML=`<button class="back" onclick="goHome()">← Centro de mando</button><h2>Historial</h2><p class="muted">Las inspecciones se almacenan en el servidor de la aplicación.</p><div class="form">${inspections.length?inspections.map(x=>`<article class="card" onclick="openInspection('${x.id}')"><span>◫</span><b>${esc(x.title)}</b><small>${esc(x.location||"Sin ubicación")} · ${new Date(x.createdAt).toLocaleString()}</small><small>${esc(x.component||"Sin componente")}</small></article>`).join(""):`<div class="empty">No hay inspecciones registradas.</div>`}</div>`;
+function showHistory(){function moduleContent(type){
+
+  if(type==="environment") {
+    return `
+      <div class="panel form">
+        <p>
+          Selecciona el componente que quieras documentar
+          en una inspección.
+        </p>
+
+        <div class="chips">
+          ${[
+            "Agua",
+            "Suelo",
+            "Aire",
+            "Residuos",
+            "Ruido",
+            "Olores",
+            "Emisiones",
+            "Vertimientos",
+            "Biodiversidad",
+            "Energía",
+            "Clima",
+            "Sustancias químicas",
+            "Proceso productivo",
+            "Riesgo",
+            "Infraestructura",
+            "Otro"
+          ].map(x => `<span class="chip">${x}</span>`).join("")}
+        </div>
+
+        <button class="primary" onclick="newInspection()">
+          Iniciar análisis
+        </button>
+      </div>
+    `;
+  }
+
+
+  if(type==="lab") {
+    return `
+      <div class="panel form">
+
+        <div class="field">
+          <label>COMPONENTE</label>
+
+          <select>
+            <option>Agua</option>
+            <option>Suelo</option>
+            <option>Aire</option>
+            <option>Residuos</option>
+            <option>Ruido</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+
+        <div class="row">
+
+          <div class="field">
+            <label>PARÁMETRO</label>
+            <input
+              placeholder="pH, turbidez, TDS…"
+            >
+          </div>
+
+
+          <div class="field">
+            <label>RESULTADO / UNIDAD</label>
+            <input
+              placeholder="Ej. 7.2 / unidad"
+            >
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="field">
+            <label>MÉTODO / TÉCNICA</label>
+            <input
+              placeholder="Método analítico"
+            >
+          </div>
+
+
+          <div class="field">
+            <label>LABORATORIO</label>
+            <input
+              placeholder="Nombre"
+            >
+          </div>
+
+        </div>
+
+
+        <p class="muted">
+          Los resultados deben provenir de medición o certificado;
+          OCULUS no inventa resultados.
+        </p>
+
+      </div>
+    `;
+  }
+
+
+  if(type==="knowledge") {
+    return `
+      <div class="panel form">
+
+        <p>
+          <b>Mente Construida</b> organiza conocimiento
+          aportado por ti.
+        </p>
+
+
+        <div class="field">
+          <label>FUENTE TÉCNICA</label>
+
+          <input
+            placeholder="Título del manual, procedimiento, norma o artículo"
+          >
+        </div>
+
+
+        <div class="field">
+          <label>CLASIFICACIÓN</label>
+
+          <select>
+            <option>Manual</option>
+            <option>Procedimiento</option>
+            <option>Normativa</option>
+            <option>Artículo científico</option>
+            <option>Método analítico</option>
+            <option>Matriz</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+
+        <p class="muted">
+          En esta versión la arquitectura queda preparada
+          para incorporar RAG/documentos sin fingir
+          entrenamiento permanente del modelo.
+        </p>
+
+      </div>
+    `;
+  }
+
+
+  if(type==="matrix") {
+    return `
+      <div class="panel form">
+
+        <p>
+          <b>Matriz editable:</b>
+          actividad → aspecto → impacto → criterio →
+          valoración → significancia → medidas.
+        </p>
+
+
+        <div class="row">
+
+          <div class="field">
+            <label>ACTIVIDAD</label>
+            <input>
+          </div>
+
+
+          <div class="field">
+            <label>ASPECTO</label>
+            <input>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="field">
+            <label>IMPACTO</label>
+            <input>
+          </div>
+
+
+          <div class="field">
+            <label>SIGNIFICANCIA</label>
+
+            <input
+              placeholder="Definida por tu metodología"
+            >
+          </div>
+
+        </div>
+
+
+        <p class="muted">
+          La metodología del usuario debe prevalecer
+          sobre cualquier escala genérica.
+        </p>
+
+      </div>
+    `;
+  }
+
+
+  return `
+    <div class="panel form">
+
+      <p>
+        Configura el servidor con
+        <b>OPENAI_API_KEY</b>
+        como secreto.
+        La clave nunca se guarda en el navegador.
+      </p>
+
+
+      <div class="notice">
+
+        <span>Proveedor de inteligencia artificial</span>
+
+        <b>OpenAI</b>
+
+      </div>
+
+
+      <div class="notice">
+
+        <span>Análisis multimodal</span>
+
+        <b>Texto + Imagen</b>
+
+      </div>
+
+
+      <div class="notice">
+
+        <span>Clave API</span>
+
+        <b>Protegida en Vercel</b>
+
+      </div>
+
+
+      <p class="muted">
+
+        La clave OPENAI_API_KEY se almacena como
+        variable de entorno privada en Vercel.
+        Nunca la coloques dentro de HTML,
+        JavaScript del navegador o archivos públicos.
+
+      </p>
+
+    </div>
+  `;
 }
-function openInspection(id){current=inspections.find(x=>x.id===id);renderInspection();}
-function showModule(type){
- const names={environment:"Análisis ambiental",lab:"Laboratorio",knowledge:"Mente Construida",matrix:"Matriz de evaluación de impactos",reports:"Informes",settings:"Configuración"};
- if(type==="reports"){showReports();return;}
- screen().innerHTML=`<button class="back" onclick="goHome()">← Centro de mando</button><h2>${names[type]}</h2>${moduleContent(type)}`;
-}
-function moduleContent(type){
- if(type==="environment") return `<div class="panel form"><p>Selecciona el componente que quieras documentar en una inspección.</p><div class="chips">${["Agua","Suelo","Aire","Residuos","Ruido","Olores","Emisiones","Vertimientos","Biodiversidad","Energía","Clima","Sustancias químicas","Proceso productivo","Riesgo","Infraestructura","Otro"].map(x=>`<span class="chip">${x}</span>`).join("")}</div><button class="primary" onclick="newInspection()">Iniciar análisis</button></div>`;
- if(type==="lab") return `<div class="panel form"><div class="field"><label>COMPONENTE</label><select><option>Agua</option><option>Suelo</option><option>Aire</option><option>Residuos</option><option>Ruido</option><option>Otro</option></select></div><div class="row"><div class="field"><label>PARÁMETRO</label><input placeholder="pH, turbidez, TDS…"></div><div class="field"><label>RESULTADO / UNIDAD</label><input placeholder="Ej. 7.2 / unidad"></div></div><div class="row"><div class="field"><label>MÉTODO / TÉCNICA</label><input placeholder="Método analítico"></div><div class="field"><label>LABORATORIO</label><input placeholder="Nombre"></div></div><p class="muted">Los resultados deben provenir de medición o certificado; OCULUS no inventa resultados.</p></div>`;
- if(type==="knowledge") return `<div class="panel form"><p><b>Mente Construida</b> organiza conocimiento aportado por ti.</p><div class="field"><label>FUENTE TÉCNICA</label><input placeholder="Título del manual, procedimiento, norma o artículo"></div><div class="field"><label>CLASIFICACIÓN</label><select><option>Manual</option><option>Procedimiento</option><option>Normativa</option><option>Artículo científico</option><option>Método analítico</option><option>Matriz</option><option>Otro</option></select></div><p class="muted">En esta versión la arquitectura queda preparada para incorporar RAG/documentos sin fingir entrenamiento permanente del modelo.</p></div>`;
- if(type==="matrix") return `<div class="panel form"><p><b>Matriz editable:</b> actividad → aspecto → impacto → criterio → valoración → significancia → medidas.</p><div class="row"><div class="field"><label>ACTIVIDAD</label><input></div><div class="field"><label>ASPECTO</label><input></div></div><div class="row"><div class="field"><label>IMPACTO</label><input></div><div class="field"><label>SIGNIFICANCIA</label><input placeholder="Definida por tu metodología"></div></div><p class="muted">La metodología del usuario debe prevalecer sobre cualquier escala genérica.</p></div>`;
- return `<div class="panel form"><p>Configura el servidor con <b>GEMINI_API_KEY</b> como secreto. La clave nunca se guarda en el navegador.</p><div class="notice"><span>Proveedor</span><b>Gemini</b></div><div class="notice"><span>Live multimodal</span><b>Token efímero</b></div><p class="muted">No compartas tu clave en el chat ni dentro del HTML.</p></div>`;
 }
 function showReports(){screen().innerHTML=`<button class="back" onclick="goHome()">← Centro de mando</button><h2>Informes</h2><div class="form">${inspections.length?inspections.map(x=>`<article class="card"><b>${esc(x.title)}</b><small>${esc(x.location||"")}</small><button class="secondary" onclick="reportById('${x.id}')">Abrir informe</button></article>`).join(""):`<div class="empty">Guarda una inspección para generar su informe.</div>`}</div>`;}
 function reportById(id){current=inspections.find(x=>x.id===id);showReportPreview();}

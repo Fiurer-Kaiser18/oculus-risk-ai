@@ -21,9 +21,18 @@ async function load() {
     inspections = await api("/api/inspections");
     $("countCard").textContent = `${inspections.length} inspección${inspections.length===1?"":"es"}`;
     const h = await api("/api/health");
-    $("aiState").textContent = h.geminiConfigured ? "● Gemini conectado en servidor" : "○ Falta configurar GEMINI_API_KEY";
-    $("statusText").textContent = h.geminiConfigured ? "IA lista" : "Modo evidencia";
-    $("statusDot").style.background = h.geminiConfigured ? "var(--ok)" : "var(--danger)";
+$("aiState").textContent = h.openaiConfigured
+  ? "● OpenAI conectado en servidor"
+  : "○ Falta configurar OPENAI_API_KEY";
+
+$("statusText").textContent = h.openaiConfigured
+  ? "IA lista"
+  : "Modo evidencia";
+
+$("statusDot").style.background =
+  h.openaiConfigured
+    ? "var(--ok)"
+    : "var(--danger)";
   } catch(e) { $("aiState").textContent = "Servidor no disponible"; }
 }
 function goHome(){ location.reload(); }

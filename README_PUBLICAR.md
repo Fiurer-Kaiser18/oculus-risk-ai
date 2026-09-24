@@ -39,3 +39,4 @@ El endpoint `/api/live-token` genera un token efímero para que el navegador no 
 Esta versión es una base funcional y extensible. Las funciones de normativa dinámica, búsqueda web, geolocalización avanzada, mapas históricos, carga RAG de documentos, matrices basadas en metodologías suministradas por el usuario y exportación DOCX/Excel requieren sus módulos de integración correspondientes; la interfaz y arquitectura están preparadas para añadirlos sin presentar datos inventados.
 
 La IA es preliminar y no sustituye inspección profesional, medición instrumental, laboratorio, certificación o verificación normativa.
+<!-- Actualización de configuración -->

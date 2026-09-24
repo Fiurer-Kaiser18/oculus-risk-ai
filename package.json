@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node servidor.js"
   },
   "dependencies": {
-    "@google/genai": "^1.20.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "openai": "^5.20.0"
   },
   "engines": {
     "node": "22.x"
